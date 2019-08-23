@@ -1,0 +1,166 @@
+<html>
+<head>
+<title>Chapter 7</title>
+<style type="text/css">
+p.list { margin-left: 2em; margin-right: 2em; }
+blockquote { margin-top: 0; margin-bottom: 0; }
+span.shaded { background: #CCC; }
+code,pre { font-weight: bold; }
+td.caption { text-align: center; }
+table.image { margin-left: 2em; }
+p { font-size: 100%; }
+h1 { padding-bottom: 2em; }
+h4 { display: inline; }
+div.body { width: 6.5in; margin-left:1in; }
+</style>
+</head>
+<body><div class="body">
+<h1>Chapter 7: Evaluation</h1>
+<p>
+Software evaluation has been extensively studied. For example, Basili, Selby, and Hutchens (1986) review "the experimental work that has been performed in software engineering over the past several years," in which they cite over a hundred such studies. 
+</p>
+<p>
+From an MIS perspective, Wolstenholme, Hederson, and Gavine (1993) suggest that assessment of MIS systems has traditionally been a "post-implementation activity" which is often not properly carried out because of the cost and difficulty. They suggest prototyping, in which assessment is done automatically along the way as a possible technical solution. Using methodologies based on modeling, they suggest, "builds a bridges between the reality of the application domain and the structure of the MIS." Other methodologies are "based on a philosophy of participation between the software engineers and the actors in the host organization."
+</p>
+<p>
+Gregory (1991) discusses how to make "an appropriate choice of evaluation methodology" suggesting a "contingency approach." For a well-established end user programming tool such as the spreadsheet, detailed empirical analyses are possible (Sajaniemi & Pekkanen, 1988). Even in such a case, an ethnographic approach may be more valuable (Nardi & Miller, 1990; Nardi & Miller, 1991; Gantt & Nardi, 1992; Nardi, 1993; Nardi, 1995). Such an approach assumes "that the anthropologist is ignorant of the understandings possessed by the informant but wishes to learn as much as possible through interaction and observation" (Nardi, 1993).
+</p>
+<p>
+Because we view TOOL as a kind of medium of expression, we felt it most appropriate to evaluate it by observing the way in which people chose to use it. We enlisted the help of four groups of people to accomplish this. First, we used it ourselves: not only to create TOOL itself, but also for numerous other applications and smaller tasks. Second, a small software development group used TOOL in a real development project. Third, we allowed a fourth year Computer Science class to use TOOL as a sample product in a course on software testing. Finally, we recount the results of numerous other attempts to convince conventional programmers to use it in real development tasks.
+</p>
+<h2>7.1 Internal evaluation</h2>
+<p>
+First of all, we used TOOL to develop TOOL itself, as explained in the bootstrap section of the previous chapter. Besides being the standard test of the power of a programming language (ie. can it be used to write its own compiler?), this has the advantage of ensuring that applications developed as extensions to the base TOOL system are at least partially tested. Also, it is common wisdom that the developers of a system or application should be required to use it themselves, as this will motivate them to make it easier to use, and more robust.
+</p>
+<p>
+In addition, we developed several applications using TOOL, including: a simple hypertext system, a disk and file manager, a classroom scheduling tool, a parser generator, a database conversion utility, and a program which produces a diagram of a DataPerfect database. The last of these is shipping with the current version of DataPerfect.
+</p>
+<p>
+We also used TOOL in our everyday work, the assist us in everyday tasks. We have used it to transform graphic files, including the creation of <em>in between</em> versions of some line drawings for use in a morphing presentation. We have created a simple terminal emulator.
+</p>
+<p>
+TOOL was also the test bed for an experiment with rational arithmetic (Matula & Kornerup, 1985), which was so successful that we incorporated in into the system.
+</p>
+<h2>7.2 Evaluation in a commercial project</h2>
+<p>
+Two junior developers worked with TOOL as the team creating the DOS version of a commercial product. They agreed that the learning curve was long and somewhat steep at times, but that this was quickly forgotten, and they had trouble relating to the difficulties experienced by new learners of the system.
+</p>
+<p>
+One developer said that it was "more like being an artist than a builder" in that he would move directly from visualization to creation. As he learned to use the environment, he forgot about the language and interface and just accomplished tasks, with his focus shifting from TOOL itself to everything but TOOL.
+</p>
+<p>
+The other developer said that she liked it better than other environments she had used, especially that code reuse was much easier. She liked the source code browsers, saying that being able to see one method at a time enabled her to concentrate on a single issue.
+</p>
+<p>
+Both agreed on the need for more comments (the current implementation keeps only one comment per method), and would have liked more training and/or documentation. Both liked the fact that memory was managed for them, so that they didn't have to worry about dangling pointers and memory leaks. The also liked the number classes, saying that calculations were fast and accurate, and they didn't have to worry about things like overflow.
+</p>
+<p>
+They agreed that it was a success in that it helped them get their work done, and, they liked it. Said one, "I won't give it back!" They were disappointed when their project was canceled (for reasons other than TOOL). They agreed that it failed because: it had limited visibility in their organization, lacked official sanction and support, was neither an industry nor a company standard, had too small a user base, and did not support graphical user interfaces.
+</p>
+<p>
+During the time they used TOOL, they accomplished some remarkable things, including subclassing the TOOL parser and decompiler to create a translator from the DataPerfect formula language into TOOL methods. Also, they were able to keep up with, and sometimes lead, a larger group of more experienced developers who were working on a GUI version of the same project.
+</p>
+<p>
+Looking back on this project (a year later), one of the developers still remembered the thrill of "writing my own piece of code that finally worked." She remembers an "initial confusionþthen all of a sudden things clicked." She considers herself not to be "a computer programmer by trade. I'm a business programmer, I guess."
+</p>
+<p>
+She pointed out that there is a difference between programmers who are more concerned with "what I can make the computer do," and those, like herself, who have "this business process" and wonder "how can I automate it?" A similar distinction is made by Nardi (1993) between professional programmers and end users: "programmers like computers because they get to program, and end users like computers because they get to get thier work done."
+</p>
+<p>
+Before joining the development effort described in this section, she had learned enough about TOOL to develop a stand-alone application to assist in defect tracking. She found that she was able to reuse not only what she had learned, but much of the code she had written, as well, in the new project. She thinks TOOL can meet both kinds of needs: she "could solve a specific problem, then back up and generalize, reusing the code. In other systems, I would have had to be thinking generally from the start. I can do one case, then take that code and grow it."
+</p>
+<h2>7.3 Evaluation in a course on software testing</h2>
+<p>
+We made a somewhat crippled version of the TOOL system available to a senior class in software testing. They were able to find a few bugs, for which we were grateful. On the whole, they tended not to like TOOL, saying that it was different than what they were used to, did not have a GUI, and was not a standard text windowing system.
+</p>
+<p>
+We were frustrated by this experience, because we were unable, in our few presentations to the class, to communicate our vision of what is important about TOOL. Besides TOOL, they were given earlier drafts of chapters 4 and 5, as well as the appendixes, of this thesis as documentation. We were disappointed at the number of students who complained about the <em>errors</em> in appendix two, rather than recognizing that a more interactive style of programming was being offered to them, and that, not only was an error not expensive, but that much could be learned from it.
+</p>
+<h2>7.4 Evaluation by professional software developers</h2>
+<p>
+We attempted on several occasions to convince professional software developers to use TOOL in real projects. Other than the one use described above, we were unsuccessful. Partly, this was due to a lack of written documentation (basically, only earlier drafts of chapters 4 and 5, and appendix 1 of this thesis were available). The universal response was that they preferred to use the C programming language.
+</p>
+<p>
+The specific reasons they gave for preferring C are:
+</p>
+<p class="list">
+     They can achieve efficient execution due to compile-time type checking and generation of machine code rather than interpretation.
+</p>
+<p class="list">
+     C presents a relatively simple execution model (Gabriel, 1994). Though not as simple as the the model of TOOL, it is well understood by professional programmers.
+</p>
+<p class="list">
+     Programs can be constructed from separately compiled pieces. They had difficulty understanding that linking could be deferred to run-time.
+</p>
+<p class="list">
+     They were familiar with the more concise syntax.
+</p>
+<p class="list">
+     The C programming environment came with a very large set of well-documented libraries.
+</p>
+<p>
+We determined some specific reasons that professional programmers should have considered adopting TOOL, and the reasons why they did not:
+</p>
+<p class="list">
+     TOOL is a higher level language. Programmers shouldn't have to worry about low-level things like register and memory allocation. Why? For C, these things are addressed by library routines which are trusted, even though the source code is often unavailable; and in C++ by providers of class definitions and libraries. They were, on the whole, unaware of the tremendous expertise required to write C++ libraries that are not subject to memory leaks, and other subtle problems (Sakkinen, 1988).
+</p>
+<p class="list">
+     TOOL replaces the low-level notion of pointer by the notion of object reference, removing the classic dangling pointer and memory leak problems. Why? Partly because of improved debugging environments þ it is fun to track down these problems, and certainly one enjoys the great feeling of accomplishment when one finally discovers the root cause of the problem. And, partly because of a feeling that the programmer ought to be able to avoid this kind of problem (Wirth, 1986).
+</p>
+<p class="list">
+     TOOL performs run-time checking of things like array reference out of bounds. Why? Worries about execution performance, and, again, feelings that the programmer ought to be able to avoid these errors.
+</p>
+<p class="list">
+     Professional programmers as a group tend to reject the notion that end users might need to extend their applications, or need to program something unexpected on top of it. Why? They felt that the macro languages they provided users were adequate. And a remarkably strong tendancy to feel that they, as professional developers, ought to be able to foresee all user needs and provide for them by parameterization.
+</p>
+<p class="list">
+     TOOL has the promise of offering more efficient development cycles, due to elimination of waiting time for linking and reduction of compilation time to a split second. Why? The learning curve was considered too long; they lacked confidence in the run-time system and doubted its ability to scale up to a complete application.
+</p>
+<p>
+Even though TOOL has some distinct advantages, that ought to be of value even to professional programmers, we were not successful in convincing them to try it.
+</p>
+<p>
+As shown by our evaluation, although a handful of developers have adopted TOOL enthusiastically, the vast majority have failed to adopt it. In part, this has been due to the time period from the establishment of the requirements to the completion of the TOOL prototype. For example, portability was achieved across a broad range of text-oriented platforms. However, in the meantime, graphical user interfaces have come to dominate, and in retrospect, the decision to implement only a character-oriented windowing system seems to have been a mistake.
+</p>
+<p>
+A larger reason is an unexpected tenacity on the part of developers to prefer the kind of programming language and environment to which they have become accustomed. We found them, for the most part, very reluctant to even consider alternatives.
+</p>
+<h2>7.5 Conclusion</h2>
+<p>
+Now we review the TOOL project requirements derived in Chapter 2.
+</p>
+<h3>7.5.1 Computational completeness</h3>
+<p>
+We have no doubts that this requirement has been met. TOOL has been used in significant projects, including its own development, and has not been found lacking. As the case studies in Chapter 1 indicate, any complete programming language can be used successfully by a sufficiently motivated end user.
+</p>
+<p>
+Languages like BASIC add an additional dimension over languages like C, due to the flexibility provided by the interpretive environment and automatic memory management. Similarly, TOOL adds the extra dimension of allowing access to the language compiler itself at run-time. This extra power was used to advantage by the second group of evaluators.
+</p>
+<h3>7.5.2 Simplicity</h3>
+<p>
+This requirement was not entirely met. Even though one clearly does not need to be a systems programmer to learn TOOL, the learning curve was considered rather steep. After some initial effort, we found that those who persisted would rather suddenly feel <em>at home</em> with the TOOL concepts, and miss them in other environments.
+</p>
+<p>
+The model of computation, though simple as required, was remarkably difficult to teach. This seemed to be due to our TOOL experts having forgotten exactly what it was they found difficult about the model while they were learning it themselves.
+</p>
+<p>
+Our users found TOOL to be extensible, and in fact became tool makers. Not content with the programming tools we provided, they first extended these, and then began making their own tools.
+</p>
+<p>
+The layering approach (Conrad & Bastian, 1991) was tested successfully with our third group of evaluators. We did not wish to open up all of our system to such a large external group. So, we used the protection mechanism to hide the source code to the more sensitive parts of our system, especially the compiler and decompiler.
+</p>
+<h3>7.5.3 Prototyping</h3>
+<p>
+Those evaluators who persisted to become TOOL users consider this requirement to have been met. The development methodology which TOOL encourages was greatly appreciated.
+</p>
+<h3>7.5.4 Primitive operations</h3>
+<p>
+As the TOOL environment was developed, new primitive operations were added less and less frequently. The set which is available now seems quite appropriate to the kind of data-oriented applications for which TOOL was intended. Professional developers would have like to see better support for adding new primitives, especially to give them access to legacy code from within TOOL.
+</p>
+<h3>7.5.5 Further evaluation</h3>
+<p>
+We would like to see more evaluation of TOOL. In the final analysis, TOOL, like Smalltalk, is a medium rather than an artistic product. It can only really be judged by those who would use the medium to produce their work. And, since their work may be yet another medium, it can be judged by those who would use that medium, and so on.
+</p>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+</div></body>
+</html>

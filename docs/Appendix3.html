@@ -1,0 +1,142 @@
+<html>
+<head>
+<title>Appendix 3</title>
+<style type="text/css">
+ul { list-style: none; }
+ul li { font-size: 100%; }
+p.list { margin-left: 2em; margin-right: 2em; }
+blockquote { margin-top: 0; margin-bottom: 0; }
+span.shaded { background: #CCC; }
+code,pre { font-weight: bold; }
+td.caption { text-align: center; }
+table.image { margin-left: 2em; }
+p { font-size: 100%; }
+h1 { padding-bottom: 2em; }
+h4 { display: inline; }
+div.body { width: 6.5in; margin-left:1in; }
+</style>
+</head>
+<body><div class="body">
+<h1>Appendix 3: TOOL program format</h1>
+<p>
+TOOL is not Smalltalk. This document is provided to demonstrate an approach to representing an object oriented program in a textual format, and may contain ideas adaptable to such a representation for Smalltalk.
+</p>
+<h2>3.A.Overview</h2>
+<p>
+Each program or program fragment is called a package or package file. A package file consists of ASCII text (extended to include the printable characters added by the IBM PC implementation -- those with codes 128 through 254).
+</p>
+<p>
+A package is a sequence of literal methods. Each literal method in turn is read in, compiled, and either:
+</p>
+<ul>
+	<li>-immediately executed, or
+	<li>-stored into a class method dictionary, or
+	<li>-ignored.
+</ul>
+<p>
+A literal method may specify the immediate processing of another package. When this occurs, processing of the current package is suspended until the other package has been completely processed, at which time processing of the suspended package resumes. There is no implementation limit on the depth to which such processing can be nested. However, there is an emergent, difficult to predict, limit on the nesting depth, based on the size of the run-time stack.
+</p>
+<p>
+Any characters, including white space, between literal methods is treated as a comment and completely ignored.
+</p>
+<h2>3.B.Literal Methods</h2>
+<p>
+A literal method consists of
+</p>
+<ul>
+	<li>-an opening brace, ${
+	<li>-an optional class name, followed immediately by double closing angle brackets, '>>'
+	<li>-an optional method pattern
+	<li>-an optional list of identifiers, defining temporary method variables, introduced by a semicolon, $;
+	<li>-a period, separating class and method name from implementation, $.
+	<li>-a statement list
+	<li>-a closing brace, $}
+</ul>
+<p>
+If a literal method in a package contains a class name and a method pattern, it is compiled and installed into the method dictionary of the named class.
+</p>
+<p>
+If a literal method in a package contains neither a class name nor a method pattern, it is compiled and immediately executed. Such methods are called anonymous methods.
+</p>
+<p>
+Other literal methods are ignored.
+</p>
+<h2>3.C.Conventions</h2>
+<p>
+The system guarantees only that the literal methods will be processed in the order they appear in the package. Over time, a conventional order has been adopted by TOOL programmers. By convention, a package consists of literal methods doing the following:
+</p>
+<p>
+1. anonymous methods which define new global variables (other than classes) or which assign new values to pre-existing global variables.
+</p>
+<pre>
+
+	{.Tool globals at: 'Vectors' put: Table new;
+	   at: 'Methods' put: Table new}
+</pre>
+<p>
+2. anonymous methods which define new classes, or which redefine pre-existing ones. These are ordered by the inheritance relation, superclasses appearing before their subclasses.
+</p>
+<pre>
+
+	{.Class newClass: 'ClassVector'
+	  arrayType: #Object
+	  superclass: Collection
+	  instanceVariableNames: 'freeSlot'
+	  poolDictionaries: ''}
+</pre>
+<p>
+3. methods for each of the newly introduced classes. Note that since all classes are defined before all methods, circular references among classes from within their methods are possible.
+</p>
+<pre>
+
+	{ClassVector>>initialize.
+	  freeSlot := 0.
+	  Return: self.}
+</pre>
+<p>
+4. methods added to pre-existing classes.
+</p>
+<pre>
+
+	{Table>>where: conditionBlock do: actionBlock.
+	  From: 1
+	    to: self basicSize
+	    by: 2
+	    do: [ :b1.
+	      If: (conditionBlock value: (self basicAt: b1))
+	        isTrue: [
+	          actionBlock value:
+	            (self basicAt: b1 + 1)]].
+	  Return: self.}
+</pre>
+<p>
+5. anonymous methods which open a Workspace on the screen containing method code which can be highlighted and executed to launch the application in the package.
+</p>
+<pre>
+	{.Workspace new openOn: '; t1.
+	Object withAllSubclasses do: [ :c.
+	  t1 := If: c superclass isNil: [List new]
+	    isNotNil: [(Vectors at: c superclass name)
+	      copy].
+	  c selectors do: [ :s. t1 addIfAbsent: s].
+	  Vectors at: c name put: t1].
+	Vectors keys do: [ :cn.
+	  (Vectors at: cn) do: [ :s.
+	    (Methods at: s ifAbsent: [
+	        Methods at: s put: List new.
+	        Methods at: s])
+	      add: cn]].
+	'
+	  initialExtent: (51,16)
+	  label: 'Compute Vectors and Methods'}.
+</pre>
+<p>
+Note that this is optional -- a literal method in this position in a package may do other things, such as:
+</p>
+<ul>
+	<li>-add an item to the system menu to launch the application, or
+	<li>-direct the sealing-off of a stand-alone application.
+</ul>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+</div></body>
+</html>

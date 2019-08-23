@@ -1,0 +1,363 @@
+<html>
+<head>
+<title>Chapter 4</title>
+<style type="text/css">
+span.shaded { background: #CCC; }
+code,pre { font-weight: bold; }
+td.caption { text-align: center; }
+table.image { margin-left: 2em; }
+p { font-size: 100%; }
+h1 { padding-bottom: 2em; }
+h4 { display: inline; }
+div.body { width: 6.5in; margin-left:1in; }
+</style>
+</head>
+<body><div class="body">
+<h1>Chapter 4: A Dissection of Smalltalk</h1>
+<p>
+Smalltalk is the central example of the current state of the art in object-oriented systems. It was also designed as a system to bring programming power to the end user (Kay, 1969; Kay 1993b). This chapter presents a detailed technical description, and a critical dissection of Smalltalk.
+</p>
+<p>
+The description of Smalltalk includes its fundamental concepts: a memory model, execution system, language syntax, and programming environment. The salient features of this technology are categorized, with respect to our requirements for an end user database system, as essential or inessential. Finally, we suggest two additional features our requirements dictate.
+</p>
+<h2>4.1 Description of Smalltalk</h2>
+<p>
+The original idea behind Smalltalk was to provide a personal programming environment for use by anyone, especially children (Kay, 1977). More than merely a programming language, it was intended as a new medium of expression, a "personal dynamic medium" (Kay & Goldberg, 1977).
+</p>
+<p>
+The language is based on a small number of principles (Ingalls, 1981), yet these are very powerful. The system itself is almost entirely crafted using the language - certainly it can be entirely described by programs in the language, as demonstrated by Goldberg and Robson (1983).
+</p>
+<p>
+Smalltalk, as a system, is a combination of several aspects (Rentsch 1982): a virtual machine; a language syntax and message passing semantics; a library of classes, methods, and other initial objects; a programming environment. This section will begin with a discussion of fundamental concepts, followed by an examination of these aspects from a computer science perspective.
+</p>
+<h3>4.1.1 Smalltalk Concepts</h3>
+<p>
+Smalltalk is the language, execution system, and programming environment for a personal interactive medium proposed nearly a decade before the advent of the personal computer (Kay 1969). Because it was intended for use by children, as well as adults, the language is based on a very small number of concepts. As a result, it is expected that the language will be easy to learn. Of course, a great deal of complexity can arise from even a very small number of concepts, as evidenced by the axiomatic systems of mathematics. <a name="lawsofform">Spencer-Brown (1969), for example, has shown that all of Boolean logic is inherent in the single concept of distinction.</a> In fact, the Smalltalk language is sufficiently powerful that it is possible to describe the entire execution system using Smalltalk itself (Goldberg & Robson, 1983).
+</p>
+<p>
+The basic concepts of Smalltalk are those of an object and messages to which an object will respond. An object can retain state information from one message to the next. When it receives a message, an object executes an associated method which computes the value (also an object) to be returned in response to the message.
+</p>
+<p>
+From this simple starting point, the Smalltalk idea could have evolved in at least two directions, as suggested by the classification of Wegner (1990). These have to do with how methods are organized with respect to objects. Smalltalk recognizes that objects naturally fall into categories, called classes. The class groups the methods applicable to all of the objects in a single category. Another possibility is to have each object maintain its own private collection of methods. This is the approach taken by the language <code>self</code> (Ungar & Smith, 1987). More recently, the designers of <code>self</code> recognized that many objects share the same methods, and have introduced "maps" (Chambers, Ungar & Lee 1989) as an implementation technique to group the common methods.
+</p>
+<p>
+A class in Smalltalk specifies both the internal structure of the objects belonging to it, and the methods which those objects can execute in response to messages. An object is then an instance of a class, and is very much like a frame (Minsky, 1975), having slots which can each contain a value. The number and names of the slots are specified by the class of which the object is an instance. The value contained in each slot must itself be an object (actually, as we shall see, a slot contains a reference to an object).
+</p>
+<p>
+Smalltalk classes are organized into an inheritance hierarchy. Each class inherits the structure and methods of its superclass, and may add additional slots and methods. Methods, but not slots, may be replaced in the subclass by a new method of the same name, which is said to over-ride the inherited method. At the root of the class hierarchy is the class named Object.
+</p>
+<p>
+Certain classes are essential for the execution of Smalltalk programs, while others are needed only for the implementation of its programming environment or for certain application programs. Essential classes include the class of all classes, Class, the root of the class hierarchy, Object, and the class of methods, CompiledMethod. Other essential classes describe objects which could be considered built-in data types: Character, String, and Number with its subclasses. Also needed are a class of message names, Symbol, and a class of global variables, Association. Global variables are instances of Association and have two slots, one for the name of the variable, and one for its value.
+</p>
+<p>
+These essential classes, together with their methods and some other objects, for an initial set of objects. The representations of these initial objects are stored in a file called the <em>image</em>, which is loaded into memory before execution can begin. The user programs by adding to or modifying objects in the image.
+</p>
+<h3>4.1.2 The Smalltalk Memory Model</h3>
+<p>
+The objects of a Smalltalk system can be viewed as forming a graph, with each object being a node, and each reference in an object slot being a directed edge to another object. Such a structure would be of little use if it were not grounded. In Smalltalk this is done by implementing small integers directly. If an object contains a small integer in one of its slots, in place of the usual object reference it will have the small integer itself. In practice, a slot will contain a bit pattern of fixed width used to represent an object reference. A bit pattern of width k represents 2k distinct values. In most Smalltalk-80 implementations, half of the available values are used to represent small integers directly, the other half being interpreted as object references. Thus, one bit of each object reference serves to distinguish a (ground) integer representation from a true object reference. Almes, Borning and Messinger (1983) propose extending this idea to include a direct representation of other kinds of objects.
+</p>
+<p>
+In Smalltalk a class is also an object. This is not inevitable: in C++ (Wiener & Pinson, 1988), for example, a class is not an object at run-time. Each object (except small integers) also has a slot containing a reference to the class of which it is an instance.
+</p>
+<p>
+Besides its named slots, a Smalltalk object can contain an array of references to other objects or an array of bytes. The methods for such an object can refer to the items in its array, so that these items can be sent messages. In the case of a byte array, an item from the array is converted into a small integer or a character object before being sent the message.
+</p>
+<p>
+This completes the computer science view of Smalltalk as a way of representing and organizing data in memory. The data are organized in a graph whose nodes are objects, with edges being references to other objects. Some of the objects should be considered virtual objects, as they do not occupy memory themselves, but are represented directly in the bit pattern of the object reference. MacLennan (1982) has argued that directly represented objects should be thought of as values rather than objects.
+</p>
+<h3>4.1.3 The Smalltalk Execution System</h3>
+<p>
+The execution system consists of a byte code interpreter, a set of primitive routines, and a memory management system. Primitives are provided for operations which could not be specified by the Smalltalk language or which would be performed more efficiently by machine code on the host system. The memory management system takes care of allocating memory for new objects and freeing memory occupied by objects which are no longer needed. The byte code interpreter executes methods in response to message sends.
+</p>
+<h4>4.1.3.1 The byte code interpreter</h4>
+<p>
+Execution of a Smalltalk system begins when the byte code interpreter sends a particular message to a particular object. A message send is very similar to a function call in a procedural language. It consists of two phases: method lookup and method execution.
+</p>
+<p>
+Method lookup is much like linking in a procedural language, except that it occurs at run time, and is often called dynamic linking or late binding. The interpreter examines the class of the receiver object to find a method whose name matches the message name. If this class does not provide a method of that name, the interpreter repeats the process with the immediate superclass of the receiver's class, and so on, until a matching method is found. This is the method which will be executed.
+</p>
+<p>
+It is possible that no matching method exists. This situation is like an error during linking in a procedural language. Unlike a procedural language, for which execution cannot even begin in the presence of link error, the Smalltalk interpreter will continue execution. This is done by replacing the failed message send with a send of the special message named <code>doesNotUnderstand:</code> to the same receiver with the name of the failed message as its argument. Among the initial objects is the class named Object, which is the ultimate superclass, and does contain a method for this message. The method causes the end user to be notified of the problem.
+</p>
+<p>
+The method located in the lookup phase is an object consisting of an array of bytes and references to other objects that will be needed during its execution. In procedural language terms, the array of bytes is like machine code for the Smalltalk virtual machine, and the method is the result of the compilation of Smalltalk source code. The byte code interpreter implements a pseudo processor, a stack machine, which executes the Smalltalk byte code instruction set.
+</p>
+<p>
+The byte codes can be grouped into four major categories according to their function: identifying specific objects, sending a message, assigning a new object to a slot of the receiver or to a global variable, and controlling the flow of execution.
+</p>
+<p>
+A byte code which identifies a specific object pushes that object onto the run-time stack. Objects which can be identified include the receiver, the value of a global variable, the value of a slot in the receiver, a formal argument, the value of a method temporary variable, and various constants. Constants include numbers, characters, message names, strings, arrays of constants, the undefined object <code>nil</code>, and the Boolean values <code>true</code> and <code>false</code>.
+</p>
+<p>
+With several objects on the stack, it becomes possible to perform a message send. A message send byte code directs the interpreter to consider the last few objects on the stack as a message receiver and some arguments. The byte code also provides the name of the message. The interpreter will then interrupt the execution of the current method, and perform the method lookup and execution of the message send described by the byte code. Ultimately, the called method will finish its execution and return, having removed its receiver and arguments from the stack and replaced them with the object it is returning.
+</p>
+<p>
+A byte code which assigns a new value to a receiver slot or to a global variable pops an object from the stack and puts it in place of the object currently occupying the slot.
+</p>
+<p>
+Control of the flow of execution is achieved by byte codes which cause the top object on the stack to be returned from the current method as its result, and byte codes which direct the interpreter to continue execution at a different point in the array of byte codes. The latter category of byte codes are like jump instructions in a machine language, or goto in a higher level language.
+</p>
+<h4>4.1.3.2 The primitive routines</h4>
+<p>
+In addition to an array of byte codes, a method may refer to a primitive routine. These routines are built into the byte code interpreter and perform some actions directly in the host system which is executing the interpreter. If the routine is unable to complete successfully, the primitive fails, and the interpreter executes the byte codes of the method. If the primitive succeeds, the interpreter performs the necessary actions without interpreting the byte codes and returns an object to the sending method.
+</p>
+<p>
+Primitive routines are required for actions on the host system, such as writing to the screen, obtaining input from keyboard and mouse, and reading and writing files. Other primitive routines are present for run time efficiency and perform actions which are needed frequently, but which could otherwise be specified in the Smalltalk language.
+</p>
+<h4>4.1.3.3 Memory management</h4>
+<p>
+Smalltalk classes can be sent the message <code>new</code>. In response, they return a new instance of themselves, whose slots are each initialized to refer to the special object <code>nil</code>. The new object requires a certain amount of memory, which is provided by the memory management component of the execution system. There is no explicit message which can cause an object to go out of existence. Instead, the memory management component provides a garbage collection service. When there are no longer any other objects referring to an object, that object is removed from memory and the space it occupied is then made available for allocation to new objects.
+</p>
+<h3>4.1.4 The Smalltalk Language Syntax</h4>
+<p>
+Like the entire Smalltalk system, the syntax of the language itself is based on a small number of concepts. The basic unit is the message send. A message send must identify the receiver of the message, the name of the message, and the argument objects. A message send itself computes a single object, which is the result of executing the corresponding method.
+</p>
+<p>
+Every operation in Smalltalk is a message send. At the simplest level, this includes arithmetic expressions. For example, to compute 2 + 3, 2 would be identified as the receiver, and would be sent the message "+" with 3 as an argument. The method corresponding to "+" for integers would be executed for the receiver 2, and this method would return the object 5 as the result of the message send.
+</p>
+<h4>4.1.4.1 Message sends</h4>
+<p>
+Smalltalk uses an infix notation for message sends, in which the message name is broken into one or more parts which separate the receiver and arguments from one another. Message sends can be nested. That is, a message send can be used to compute the receiver object or one of the argument objects for another (outer) send.
+</p>
+<p>
+Message sends must be grounded. That is, at some point the receiver and arguments of a message send must be something other than the result of other message sends. These could be initial objects or integers. The lexemes which identify objects include: literal constants, instance variables, formal arguments, method temporary variables, global variables, and pseudo variables.
+</p>
+<p>
+Message names are also called selectors, and are of three kinds: unary selectors, binary selectors, and keyword selectors. Lexically, a unary selector looks like an identifier. A binary selector is one or two special characters. A keyword selector is one or more keywords, each of which is an identifier immediately followed by a colon. Examples of selectors (two each of unary, binary, and keyword selectors): <code>x</code>, <code>printString</code>, <code>+</code>, <code>//</code>, <code>at:</code>, and <code>at:put:</code>. A unary selector requires no arguments, a binary selector requires a single argument, and a keyword selector requires as many arguments as it has keywords. For the sample selectors shown above, the number of arguments required are respectively, 0, 0, 1, 1, 1, and 2.
+</p>
+<p>
+In a Smalltalk expression, unary messages are sent first, then messages with binary selectors, and finally keyword messages. Within each category of selectors, messages are sent in a left-to-right order. For example, in the following expression
+</p>
+<pre>
+	Rectangle <span class="shaded">new</span>
+		<span class="shaded">origin:</span> self <span class="shaded">+</span> a1 <span class="shaded">origin</span> <span class="shaded">-</span> 1 <span class="shaded">extent:</span> extent.
+</pre>
+<p>
+the selectors (shaded) are: <code>new</code>, <code>origin:extent:</code>, <code>+</code>, <code>origin</code>, and <code>-</code>. The corresponding messages will be sent in the order: <code>new</code>, <code>origin</code> (unary selectors, left-to-right); <code>+</code>, <code>-</code> (binary selectors, left-to-right); and, finally, <code>origin:extent:</code> (keyword selector).
+</p>
+<p>
+Parentheses can be used as needed to alter the order in which the messages are sent. The previous example, fully parenthesized would look like
+</p>
+<pre>
+	(Rectangle new)
+		origin: ((self + (a1 origin)) - 1) extent: extent.
+</pre>
+<p>
+This expression includes references to a global variable, <code>Rectangle</code>, a pseudo variable, <code>self</code>, a formal argument, <code>a1</code>, a small integer, <code>1</code>, and a slot of the receiver, <code>extent</code>.
+</p>
+<h4>4.1.4.2 Control constructs</h4>
+<p>
+Control constructs are also message sends. For example, a conditional would look like
+</p>
+<pre>
+	&lt;Boolean expression> ifTrue: &lt;block of statements>
+</pre>
+<p>
+in which the receiver of the <code>ifTrue:</code> message is a Boolean object, either <code>true</code>, an instance (the only one, in fact) of the class True, or <code>false</code>, the instance of the class False. The argument is a block of statements. The method for <code>ifTrue:</code> in the True class will cause the execution of its argument, the block of statements. The method of the same name in the False class will do nothing, but just return <code>nil</code>.
+</p>
+<p>
+As another example, a loop would look like
+</p>
+<pre>
+	&lt;block one> whileTrue: &lt;block two>
+</pre>
+<p>
+A block of statements is an object as well; it is a group of statements whose execution is deferred until the block is sent the <code>value</code> message. The <code>whileTrue:</code> method for a block causes the block itself to be evaluated. If the result is the object <code>true</code>, then the argument (block two) is evaluated and the method ends with a recursive call to itself. If the result is not <code>true</code>, the method just returns. This way of implementing a while-loop thus matches the axiomatic semantics of MacLennan (1972).
+</p>
+<p>
+Iteration is thus implemented by recursion, and involves a new block in each execution of the <code>whileTrue:</code> method. There is little wonder then that block allocations account for more than 80% of object allocations (Baden, 1983; Falcone, 1983).
+</p>
+<p>
+As a specific example, consider the method for <code>whileTrue:</code> in the class of blocks:
+</p>
+<pre>
+	whileTrue: aBlock
+		self value
+			ifTrue: [
+				aBlock value.
+				self whileTrue: aBlock]
+</pre>
+<p>
+The first line identifies the method as corresponding to the message <code>whileTrue:</code> and names the formal argument.
+</p>
+<p>
+The remainder of the method consists of two nested message sends, named <code>value</code> and <code>ifTrue:</code>. The receiver of the <code>ifTrue:</code> message is computed by the message send <code>self value</code>. The receiver of this message is identified by the pseudo variable <code>self</code> which refers to the (block) object which received the <code>whileTrue:</code> message. The object returned by the <code>self value</code> message is expected to be one of the Boolean objects which will serve as the receiver of <code>ifTrue:</code>.
+</p>
+<p>
+The argument of the <code>ifTrue:</code> message is a block, which contains two message sends. The period between them indicates that the object resulting from the <code>aBlock value</code> message send is not needed and can be dropped. The second message send is the recursive call which implements the iteration.
+</p>
+<h3>4.1.5 The Smalltalk Programming Environment</h3>
+<p>
+The Smalltalk programming environment is interactive (Goldberg, 1984), integrated (LaLonde & Pugh, 1990), mode-less (Tesler, 1981), and promotes what has been termed "fearless programming" (Diederich & Milton, 1987). It is based on multiple, overlapping windows (LaLonde & Pugh, 1991), and includes "browsers" which allow the programmer easy access to various parts of the system. There are browsers for source code, global variables, the internal state of objects, and even stack frames with their message sends, arguments, and temporary values. The environment is certainly one of the major factors responsible for the increased level of programmer productivity claimed for Smalltalk.
+</p>
+<p>
+The environment is implemented entirely in Smalltalk, and so is extensible by the user. Its major advantages stem from the ability to inspect the state of any object, incremental compilation, and a powerful debugging utility. Together these allow a programming style particularly well-suited to rapid prototyping.
+</p>
+<h2>4.2 A Critique of Smalltalk</h2>
+<p>
+Smalltalk requires adaptation if it is to be used for the production of application programs (Wirfs-Brock & Wilkerson, 1988), and it "does not meet the requirements for a database system" (Maier & Stein, 1987). This section considers those features of Smalltalk which we wish to retain, those which we wish to remove, and additional features that will be required to produce a system for rapidly producing application programs which interact with databases.
+</p>
+<p>
+Unlike the Deltatalk proposal (Borning & O'Shea, 1987), which also examines Smalltalk in the programming language design space, we are willing to consider some significant changes, and are concerned with issues other than learnability and usability. We identify several aspects of Smalltalk and for each explain why it contributes or detracts from our requirements for a data-oriented application creation system.
+</p>
+<h3>4.2.1 Essential Features of Smalltalk</h3>
+<p>
+The first requirement of an object-oriented database is that it support "a core object-oriented data model" (Kim, 1990). Smalltalk offers a mature technology which is a logical starting point in the design of an object-oriented database language (Maier & Stein, 1987).
+</p>
+<h4>4.2.1.1 Modeling with objects</h4>
+<p>
+Each real-world entity is modeled by an object. The model is an abstraction, which maintains the state of the real-world object, and implements its behavior in cooperation with the other objects of the database and application programs.
+</p>
+<p>
+The result of a database query could be an object which can be directly handled by the programming language; there would be no necessity for complex mechanisms to embed query language statements into a conventional programming language, such as those described in (Ullman, 1988, pp. 231-234).
+</p>
+<h4>4.2.1.2 Uniformity of representation</h4>
+<p>
+In Smalltalk, everything is an object, including the computational entities of classes and methods. Every object is self-defining, in the sense that it contains a reference to the class which defines its structure and behavior. Classes and metaclasses are themselves objects (Cointe, 1987). This means that they can be created dynamically to describe new sources of data, which is something we will require in the design of the database access portion of the system.
+</p>
+<h4>4.2.1.3 Automatic memory management</h4>
+<p>
+Memory is allocated whenever a new object is created (when its class is sent the message <code>new</code>), and must be deallocated automatically as soon as there are no references to the object. Object-oriented systems which do not have automatic memory deallocation (often called garbage collection) present serious difficulties to their programmers. C++, for instance, suffers from a problem known as <em>memory leak</em>, which occurs when a programmer neglects to deallocate storage in an object destructor. This and other problems (Sakkinen, 1988) led us to prefer Smalltalk over C++ as a starting point for our system.
+</p>
+<p>
+However, garbage collection can be a source of inefficiency or intolerable delays at the user interface. It is thus necessary to pay serious attention to efficient garbage collection in the design and implementation of the run-time system (Almes, Borning & Messinger, 1983).
+</p>
+<h4>4.2.1.4  Polymorphism and late binding</h4>
+<p>
+Polymorphism and its companion, late binding, are important both in the production of prototypes and in the maintenance of completed applications.
+</p>
+<p>
+Wiener & Pinson (1988) give a very convincing example which shows both a traditional and an object-oriented implementation of a heterogeneous linked list. The maintenance problem involves the addition of a new type of object to be handled by the linked list. In the object-oriented solution, this requires only the definition of a new class, together with methods implementing the behavior required of a linked list node. By contrast, the solution in a traditional language requires modification of every program that deals with the linked list.
+</p>
+<p>
+Another consequence of late binding is the possibility of a run-time error occurring because of an unexpected receiver for a message send. When this happens, the run-time system sends a standard message (<code>doesNotUnderstand:</code>) to the receiver, and a debugger is opened on the stack frame. This can be very valuable during the testing of an application, when it is usually easy to find the source of the problem.
+</p>
+<p>
+However, it is reasonable to ask whether it is responsible to "deliver a product in which 'message not understood' can occur" (Palsberg & Schwartzbach, 1991a). We believe that this is no more serious that any other run-time error which might occur in a delivered application, and that it is no more likely to occur than any other such error in a well-tested product.
+</p>
+<p>
+Proponents of static type checking argue that, given enough information, the compiler can catch most of these errors at compile time, resulting in a more reliable product (Meyer, 1988). We grant that this is true, but do not wish to require programmers in our system to provide all of the type information which this necessitates. As an alternative, we hope that type inferencing might provide many of the advantages of static typing, without requiring explicit type information to be present in the source code (Conrad 1991). This capability has been available in functional programming languages for some time (Milner, 1978), and recent progress has been reported in achieving this goal for small object-oriented languages as well (Hense, 1990; Palsberg & Schwartzbach, 1991b).
+</p>
+<p>
+The availability of a method like <code>doesNotUnderstand:</code> for dealing with failure of the late binding mechanism has some useful applications, such as forwarding messages to an instance variable.
+</p>
+<h4>4.2.1.5  Syntax of message send</h4>
+<p>
+We believe that the comb syntax used by Smalltalk, in which the name of a message is distributed between its arguments, is a desirable feature. It is usually easy (in English, at least) to create a message name which is directly readable, typically with a verb before the first argument, and prepositions introducing remaining arguments.
+</p>
+<p>
+For example, the message send
+</p>
+<pre>
+     var copyFrom: 10 to: 15
+</pre>
+</p>
+is more expressive of the intent of the programmer than a notation such as
+</p>
+<pre>
+     substring(var,10,15)
+</pre>
+<p>
+where it is not obvious whether the argument <code>15</code> is the length of the desired substring or the character position at which the substring is to end.
+</p>
+<p>
+However, the comb syntax is less expressive in the case of control constructs, where the receiver (say, a Boolean expression) might be very long and involved. It would be better for a reader of the program to be notified up front of an iterative or alternative control construct. This issue is dealt with in Chapter 5.
+</p>
+<h4>4.2.1.6 Simple precedence rules</h4>
+<p>
+There is no complicated list of precedence rules for Smalltalk operators. Instead, messages are sent in a simple, left-to-right, order within each of the three categories of selector. This allows some commonly occurring expressions to be written without parentheses. For example:
+</p>
+<pre>
+	number - 1 // 80 + 1
+</pre>
+<p>
+would correctly convert a character number into the row on which it would be displayed on an eighty column screen.
+</p>
+<p>
+A disadvantage, for those who have grasped the usual rules of precedence in arithmetic, is that multiplication and division do not necessarily take precedence over addition and subtraction. However, professional programmers have to learn different precedence rules anyway (for example, in APL), and we prefer our language to be as simple as possible for the end user to learn.
+</p>
+<h4>4.2.1.7  User-defined control structures</h4>
+<p>
+Smalltalk blocks, which are much like closures in functional languages, allow the user to define control structures. They can be used to create generators, mapping functions (LaLonde & Pugh, 1990), a switch or case statement (Budd, 1987), and other useful constructs. We believe that this is a valuable contribution of Smalltalk, which, incidentally, gives evidence of the contributions of Lisp and other functional languages (Kay, 1993b).
+</p>
+<h4>4.2.1.8  Incremental compilation</h4>
+<p>
+Rapid prototyping is possible in large part because of incremental compilation of methods in the integrated programming environment. The programmer makes changes to a method, compiles the new method, and can immediately try it out. This is a key feature of Smalltalk, which we wish to retain in our design.
+</p>
+<p>
+In fact, we wish to make this aspect of the programming environment available to users of our applications, and allow them to make it available to their users, and so on. This results in a seamless programming language and environment across all the levels of application development (Conrad & Bastian, 1991).
+</p>
+<h3>4.2.2 Inessential Features of Smalltalk</h3>
+<p>
+There are some major difficulties with the use of Smalltalk for the creation and delivery of application software. A primary difficulty is inadequate performance. Others include unnecessary complexity, and insecurities (Conrad & Bastian, 1991). It is relatively easy for a user to inadvertently crash the Smalltalk system while it is running (Udell, 1990).
+</p>
+<p>
+Similar concerns are expressed by Wirfs-Brock & Wilkerson (1988). They enumerate several drawbacks of Smalltalk-80: every part of the system is available for use or modification, there is confusion between the language definition and the implementation, it is difficult to learn, and exhibits poor performance.
+</p>
+<h4>4.2.2.1 The metaclass structure</h4>
+<p>
+While earlier versions of Smalltalk had a single metaclass, the class named <code>Class</code>, Smalltalk-80 defines a metaclass for each class (Goldberg & Robson, 1983). The reason for the introduction of this complex structure is so that classes can have different instance creation methods, so that their instances do not have to have uninitialized instance variables (containing <code>nil</code>).
+</p>
+<p>
+The notion of metaclass is very difficult for novices to learn (Wirfs-Brocks & Wilkerson, 1988). Borning and O'Shea (1987) identify metaclasses "as the most significant barrier to learnability by both students and teachers".
+</p>
+<p>
+A simple class hierarchy, involving three number classes and the class named Object, requires a total of twelve additional classes in Smalltalk-80 (Goldberg & Robson, 1983, Figure 16.5, p. 272). We believe that there is a better solution to the problem the Smalltalk metaclass structure was intended to solve. This alternate solution, which reduces the number of additional classes needed from twelve to one (the class named Class), will be described in Chapter 5.
+</p>
+<h4>4.2.2.2 The image</h4>
+<p>
+In Smalltalk, all of the objects (including classes and methods) must be present in memory for the system to run. Changes made while running Smalltalk modify the memory, and upon exiting become saved in an image file, which is a snapshot of the memory. This is undesirable, because the image file is very large. Safe program development requires sufficient disk space for several versions of the image. Furthermore, main memory in the computer must be large enough to hold the entire image. A virtual memory alternative is described in Chapter 5.
+</p>
+<p>
+Because the image contains all of the code for the programming environment itself, it is difficult to deliver an application which does not require this code. There is no easy way to remove from a working Smalltalk image everything except the code which must be delivered in a product.
+</p>
+<h4>4.2.2.3 Purity of the message sending paradigm</h4>
+<p>
+Control structures for alternation and iteration should be built into the language so that these do not have to be implemented using recursion.
+</p>
+<p>
+In practical implementations of Smalltalk, control structures are implemented in a more conventional way, using conditional jump instructions in the byte code stream. The implementation is thus not faithful to the conceptual view of the execution system. This can lead to difficulty in understanding an implementation, since changing methods such as <code>ifTrue:</code> and <code>whileTrue:</code> has no effect on the system (Conrad & Bastian, 1991).
+</p>
+<h4>4.2.2.4 Multiple inheritance</h4>
+<p>
+Multiple inheritance is available in Smalltalk, as an experimental feature (Borning & Ingalls, 1982). "Multiple inheritance is a thorny issue [and] there is no consensus in the object-oriented programming community regarding what sort of multiple inheritance, if any, should be supported." (Borning & O'Shea, 1987).
+</p>
+<p>
+Brough and Conrad (1993) point out that inheritance is often used, even by experts, where aggregation is more appropriate. We have found no compelling reason to use this feature, so it is not a part of the design of our system. This is not to claim that it is of no interest, but merely that since it interferes with simplicity, we have elected to forego multiple inheritance.
+</p>
+<p>
+A similar stance was taken by the designers of the BETA programming language: "BETA does not have multiple inheritance, due to the lack of a profound theoretical understanding, and also because the current proposals seem technically very complicated" (Madsen & M&ouml;ller-Pedersen, 1991).
+</p>
+<h4>4.2.2.5 Context objects</h4>
+<p>
+Blocks operate within the context of a particular method invocation, and thus require the creation of context objects. This becomes unnecessary if we "do not allow a block to survive the execution of its defining method" (Conrad, 1990). Eliminating context objects does remove the possibility of adding a facility like backtracking to Smalltalk, as proposed by LaLonde and Van Gulik (1988). However, we have been able to express algorithms involving backtracking, including the examples in (LaLonde & Van Gulik, 1988), without requiring blocks to survive their defining method's execution. In other cases where blocks are used in this way, we have found other solutions, including the use of anonymous methods (Conrad, 1990).
+</p>
+<h4>4.2.2.6 Very large library of classes and methods</h4>
+<p>
+According to the chief designer of Smalltalk-80, the first design principle was simplicity: "If a system is to serve the creative spirit, it must be entirely comprehensible to a single individual" (Ingalls, 1981).
+</p>
+<p>
+This goal has since been largely abandoned by Smalltalk implementations. Speaking of one of these, Udell (1990) writes, "It's a big, densely interwoven system, though, and you've got to absorb a lot of it before you can begin to make real progress." Another implementation claims to contain "a very large library of classes and methods [whose names] may be thought of as composing the API [which is] very large and rich. This is an important part of the value [offered]." In fact, this implementation actually goes so far as to discourage users from learning the entire system: "It is not recommended that new users try to learn the entire ... API. Even the most experienced ... users know <em>only a portion</em> of [it]" (IBM Smalltalk, 1994, emphasis added).
+</p>
+<p>
+We would rather have a smaller system, so that would be reasonable for an individual to learn all of it. We believe that such a simple base, combined with the extension abilities inherent in the Smalltalk design, and the protected layers approach proposed by Conrad & Bastian (1991) can result in an equally powerful system.
+</p>
+<h3>4.2.3 Missing Features of Smalltalk</h3>
+<p>
+Subject to the reservations expressed in the preceding sections, Smalltalk is an excellent programming environment. For use as a database programming language, however, it requires some enhancements (Maier & Stein, 1987), including support for physical storage, multiple users, data integrity, and larger object spaces.
+</p>
+<h3>4.2.3.1 Persistent objects</h3>
+<p>
+The objects with which database application programs operate must persist from one execution of the programs to the next. In general, it is not acceptable to simply place these objects in the image, because there are too many of them. The virtual memory mechanism of our design addresses this issue in part.
+</p>
+<h3>4.2.3.2 Database primitives</h3>
+<p>
+One of the requirements of our system is that it be able to access data which has been created by other database management systems. Smalltalk would require the addition of primitives to allow data stored in other formats to be brought into the system and modeled with objects.
+</p>
+<h2>4.3 Conclusion</h2>
+<p>
+Smalltalk is a mature technology, but is not, in its present form, exactly suited as an implementation platform for a system which would satisfy the user requirements specified in Chapter 2. In the next chapter, we present the design of the Tool object-oriented language which, while like Smalltalk in many respects, is better suited to these requirements.
+</p>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+</div></body>
+</html>

@@ -1,0 +1,234 @@
+<html>
+<head>
+<title>Appendix 1</title>
+<style type="text/css">
+p.list { margin-left: 2em; margin-right: 2em; }
+blockquote { margin-top: 0; margin-bottom: 0; }
+span.shaded { background: #CCC; }
+code,pre { font-weight: bold; }
+td.caption { text-align: center; }
+table.image { margin-left: 2em; }
+p { font-size: 100%; }
+h1 { padding-bottom: 2em; }
+h4 { display: inline; }
+div.body { width: 6.5in; margin-left:1in; }
+</style>
+</head>
+<body><div class="body">
+<h1>Appendix 1: Working with TOOL</h1>
+<h2>1.1 Starting TOOL</h2>
+<p>
+TOOL starts up with a blank screen and a cursor. You can move the cursor around with the arrow keys or with the mouse.
+</p>
+<p>
+To get anything else done, you must bring up a menu. To do this, press and release the Alt key, or hold down the Alt key then press = and release the Alt key, or click with the right mouse button. You will see the system menu, centered on the cursor:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.01.png" width="161" height="224" /></td></tr>
+</table>
+<p>
+Notice that the cursor is now a highlighted bar that moves up and down through the menu choices. You can also move the cursor off the menu entirely.
+</p>
+<p>
+To make a menu selection, move the highlighted bar to the option of your choice, and press Enter or click with the left mouse button. To see how this works, select the Exit TOOL option. When you do this, you will see the exit menu:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.02.png" width="137" height="63" /></td></tr>
+</table>
+<p>
+If you select outside of the menu (by pressing Enter or clicking with the left mouse button) you will <em>dismiss</em> or cancel the menu, and it will disappear.
+</p>
+<h2>1.2 Exiting TOOL</h2>
+<p>
+You may choose one of these options to exit TOOL, either saving the changes you made to the system during a session or not.
+</p>
+<h2>1.3 The TOOL workspace</h2>
+<p>
+Begin by popping up the system menu. Then select the option Open Workspace.
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.03.png" width="161" height="224" /></td></tr>
+</table>
+<p>
+You will see a window framer object on the screen with the cursor attached to its upper left hand corner (the <em>origin</em>):
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.04.png" width="57" height="64" /></td></tr>
+</table>
+<p>
+When you have the origin where you want it, press Enter (or click the left button). The cursor now jumps to the bottom right hand corner and you may change the size of the workspace window. When you have the desired size, press Enter.
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.05.png" width="273" height="144" /></td></tr>
+</table>
+<h2>1.4 Moving and resizing windows</h2>
+<p>
+You have a good deal of control over the size and position of the window (as you do with all windows in TOOL, including menus).  To move the window, position the cursor onto the top border or the left border of the window (but not on one of the corners).  Then press Enter or click the left button. The window borders will be replaced with a dashed line:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.06.png" width="273" height="144" /></td></tr>
+</table>
+<p>
+Now, the cursor will move the dashed border.  When you have it where you want it, press Enter again.  The window will move to the position indicated by the dashed border.
+</p>
+<p>
+To change the size of the window, move the cusor to any one of the four corners of the window and press Enter. Again, the border will become dashed.  But this time, the cursor will move only one corner of the window.  The opposite corner will remain fixed in its original position.  When the dashed borders indicate the desired size of the window, press Enter again.
+</p>
+<p>
+With the mouse, you may move and resize the window by dragging it from the top or left borders or from one of the corners.  To do this, position the cursor, then hold down the left mouse button.  The window borders will become dashed.  Now, while holding the left mouse button down, move the dashed border.  When it is where you want it, release the left mouse button.
+</p>
+<h2>1.5 The window menu</h2>
+<p>
+If you ask for a menu while the cursor is anywhere on the window border, you will pop up the window menu:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.07.png" width="273" height="224" /></td></tr>
+</table>
+<dl>
+<dt>Bury</dt>
+<dd>This option will move the window below any other windows that might be on the desktop.</dd>
+<dt>Inspect</dt>
+<dd>This will open a <code>Looker</code> window giving access to the internal state of the window object itself (more about this later; for now, avoid using this).</dd>
+<dt>Minimize</dt>
+<dd>This will shrink the window as much as possible. If you pop up the window menu on the new window, you will see a slightly different menu.  Choose Restore to restore the window to its normal size and position.</dd>
+</dl>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.08.png" width="217" height="176" /></td></tr>
+</table>
+<dl>
+<dt>Color</dt>
+<dd>This will allow you to change the color of the window.</dd>
+<dt>Close</dt>
+<dd>This closes the window and throws away everything in it.  You are not always given a second chance, so use this one cautiously.</dd>
+<dt>Label</dt>
+<dd>This will allow you to change the label of the window to something other than "Workspace".  Just edit the label in the window provided, then press ENTER.</dd>
+<dt>Transpose</dt>
+<dd>This will have no effect on a workspace.  Its use will be described later.</dd>
+<dt>Maximize</dt>
+<dd>This will make the window as large as possible.  To restore it to its original size and position, pop up the window menu and select Restore.</dd>
+</dl>
+<h2>1.6 The TOOL text editor</h2>
+<p>
+When you move the cursor into the workspace and begin typing, you will notice that it changes from a block to an underscore.  To position the cursor to the upper left hand corner of the workspace, move it into the workspace (anywhere), and press HOME, HOME, up arrow.
+</p>
+<p>
+The arrow keys move the cursor (but cannot move it out of the workspace entirely, unless you press F7 first).
+</p>
+<p>
+The editor does not do word wrapping, at the right side of the workspace window, so you will need to use the ENTER key to begin a new line.
+</p>
+<p>
+The BACKSPACE key deletes the character just to the left of the cursor, or if the cursor is at the left end of a line, it joins that line to the end of the previous line.
+</p>
+<p>
+If you have so many lines of text that all of them are not visible at once in the workspace, use the PAGE-UP and PAGE-DOWN keys to scroll the text thru the window one line at a time.
+</p>
+<p>
+HOME, left arrow moves the cursor to the beginning of the current line, and the END key moves it to the end of the line.
+</p>
+<p>
+Control-left-arrow and control-right-arrow move one word left and right respectively.
+</p>
+<p>
+To select a block of text, position the cursor on the first character to be selected and click the left mouse button, press Alt-F4, or F12 (SELECT). Then position the cursor just past the last character to be selected and SELECT again.  The text will be highlighted.  To remove the selection, just SELECT a third time.
+</p>
+<p>
+If you wish to select an entire word, SELECT twice with the cursor on the same letter of the word.
+</p>
+<p>
+If you wish to select an entire line, press SELECT twice with the cursor on the first position of the line to be selected.
+</p>
+<p>
+The Delete key deletes the character at the cursor. Ctrl-End deletes from that character to the end of the line. Ctrl-Backspace deletes the entire word (and trailing blanks).
+</p>
+<p>
+The text pane used in the workspace window has a menu of options:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.09.png" width="305" height="224" /></td></tr>
+</table>
+<dl>
+<dt>Original</dt><dd>Restores the previously saved contents of the window.  If you have not saved anything, this will clear the workspace.</dd>
+<dt>Print</dt><dd>Uses DPPRINT (if available) to print either the current text selection, or if nothing is selected, the entire contents of the text pane.</dd>
+<dt>Delete</dt><dd>This deletes the currently selected block of text.</dd>
+<dt>Save</dt><dd>This makes a copy of the selected block of text within the window into a place called the CopyBuffer.</dd>
+<dt>Retrieve</dt><dd>This inserts the text stored in the CopyBuffer into the text at the place the cursor was when the text menu was popped up.</dd>
+<dt>eXecute</dt><dd>The selected text is compiled and executed.</dd>
+<dt>Evaluate</dt><dd>The selected text is compiled and (if there are no compiler errors) executed.  The result produced by executing the selected text is shown in the window and is highlighted, becoming the selected block.</dd>
+<dt>Inspect</dt><dd>The selected text is compiled and executed.  The system then opens up a <code>Looker</code> window onto the resulting object (more about this later).</dd>
+<dt>Copy</dt><dd>This places a copy of the selected block of text (or, if nothing is selected, the entire text) into the CopyBuffer, and the system expects you to move to another place in this window or any other and press Enter to retrieve the copy (Copy/Move mode).</dd>
+<dt>Move</dt><dd>This removes the selected block of text, placing a copy of it in the CopyBuffer, and enters Copy/Move mode.</dd>
+<dt>Accept</dt><dd>This causes the workspace to store the contents of the text pane for possible restoration in a subsequent use of the Original option.</dd>
+<dt>Zoom</dt><dd>Select this option to make the text area as large as possible. Selecting this option a second time will restore the text area to its original size. This will have no effect in a workspace.</dd>
+</dl>
+<h2>1.7 The Evaluate option</h2>
+<p>
+Type an arithmetic expression into a workspace. For example:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.10.png" width="273" height="144" /></td></tr>
+</table>
+<p>
+Now select the entire line. One way to do this is to position the cursor at the left end of the line (Home, Home, Left Arrow), then SELECT (Alt-F4, F12, or left mouse button click) twice in a row.
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.11.png" width="273" height="144" /></td></tr>
+</table>
+<p>
+Pop up the text menu (press Alt, press Alt-=, or click the right mouse button).
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.12.png" width="281" height="234" /></td></tr>
+</table>
+<p>
+Select Evaluate. The arithmetic expression will be evaluated, and the answer shown as the highlighted selection:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.13.png" width="273" height="144" /></td></tr>
+</table>
+<h2>1.8 The Inspect option</h2>
+<p>
+Type a list constant in a workspace and select the entire line. For example:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.14.png" width="305" height="144" /></td></tr>
+</table>
+<p>
+Pop up the text menu and select the Inspect option:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.15.png" width="305" height="224" /></td></tr>
+</table>
+<p>
+When you select Inspect, a new window will appear on top of the workspace and partially overlapping it. Its title will be highlighted, because it is now the active window:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.16.png" width="345" height="224" /></td></tr>
+</table>
+<p>
+Unlike the windows we have seen so far, this one has two panes. The pane on the left has an entry <code>self</code> meaning the object being inspected, and the index of each entry in the array part of the object. In the pane on the right will be shown the item which we select in the left pane. Try this now by selecting the item labelled "<code>self</code>":
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.17.png" width="345" height="224" /></td></tr>
+</table>
+<p>
+Try looking at the first entry in the list:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.18.png" width="345" height="224" /></td></tr>
+</table>
+<p>
+The fourth element of the list is itself a list:
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.19.png" width="345" height="224" /></td></tr>
+</table>
+<p>
+You can inspect it by double clicking the left mouse button on the line labelled "4" (or pop up the menu in the left pane and select the Inspect option):
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td><img src="Appendix1.20.png" width="377" height="256" /></td></tr>
+</table>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+</div></body>
+</html>

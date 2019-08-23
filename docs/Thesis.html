@@ -1,0 +1,427 @@
+<html>
+<head>
+<title>Thesis</title>
+<style type="text/css">
+p.list { margin-left: 2em; margin-right: 2em; }
+blockquote { margin-top: 0; margin-bottom: 0; }
+span.shaded { background: #CCC; }
+code,pre { font-weight: bold; }
+td.caption { text-align: center; }
+table.image { margin-left: 2em; }
+p { font-size: 100%; }
+h1 { padding-bottom: 2em; }
+h4 { display: inline; }
+body { font-size: 100%; }
+div.body { width: 6.5in; margin-left:1in; }
+div.TOC {
+  font-size: 100%;
+  background: url(dots.gif) left bottom repeat-x;
+  text-align: right; }
+div.TOC span { float: left; padding-right: .5em; background: #FFF; }
+div.TOC b.pg { background: #FFF; font-weight: normal; }
+div.TOC span.h2 { padding-left: 1.4em; }
+div.TOC span.h3 { padding-left: 2.8em; }
+div.TOC span.h4 { padding-left: 4.2em; }
+</style>
+</head>
+<body><div class="body">
+<div align="center">
+THE UNIVERSITY OF CALGARY<br>
+<br>
+Design of an Object-Oriented Database Language:<br>
+Bridging the gap between Organizational Requirements and<br>
+the Technical Implementation of an Object-Oriented Information System<br>
+<br>
+by<br>
+Bruce A. Conrad<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+A THESIS<br>
+SUBMITTED TO THE FACULTY OF GRADUATE STUDIES<br>
+IN PARTIAL FULFILLMENT OF THE REQUIREMENTS FOR THE<br>
+DEGREE OF<br>
+DOCTOR OF PHILOSOPHY<br>
+<br>
+<br>
+DEPARTMENT OF COMPUTER SCIENCE<br>
+<br>
+CALGARY, ALBERTA<br>
+JUNE 1995<br>
+<br>
+<br>
+<br>
+<br>
+Copyright &copy; 1995 Bruce A. Conrad<br>
+</div>
+<hr>
+THE UNIVERSITY OF CALGARY
+FACULTY OF GRADUATE STUDIES
+
+
+	The undersigned certify that they have read, and recommend to the Faculty of Graduate Studies for acceptance, a thesis entitled, "Design of an Object-Oriented Database Language: Bridging the gap between Organizational Requirements and the Technical Implementation of an Object-Oriented Information System" submitted by Bruce A. Conrad in partial fulfillment of the requirements for the degree of Doctor of Philosophy.
+
+
+						                                                      
+						Supervisor, Dr. B.R. Gaines
+						Department of Computer Science
+
+
+						                                                      
+						D.R. Hill
+						Department of Computer Science
+
+
+						                                                      
+						Dr. B. Samuels
+						Department of Sociology
+
+
+						                                                      
+						Dr. M.L.G. Shaw
+						Department of Computer Science
+
+
+						                                                      
+						External Examiner, Dr. 
+						University
+
+
+Date 				
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+<hr>
+<a name="Abstract">
+                          <h1 align="center">Abstract</h1>
+</a>
+<p>
+	People need appropriate access to the data of their organization in order to further the goals of the organization.  This dissertation studies the creation of database applications, computer systems to provide this access.  I begin by interviewing the people responsible for creating or configuring database applications, to determine their requirements and aspirations.  After evaluating the effectiveness of current technology in meeting their needs, I explore the promise of object-oriented systems by dissecting an exemplar, Smalltalk, identifying its essential and inessential features.  Combining the essential nature of Smalltalk with database capabilities, I present a new object-oriented programming language designed to facilitate the construction of database applications.  I conclude by describing the implementation of a prototype of the language and its evaluation by the people it is intended to serve.
+</p>
+
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+<hr>
+<a name="Ack">
+                      <h1 align="center">Acknowledgements</h1>
+</a>
+<p>
+I wish to express gratitude to my graduate advisor, friend, and mentor, Brian Gaines. His patient and quiet belief that I would actually someday complete the writing of this dissertation, especially given the lack of much hard evidence, has been a sustaining force. Together with other faculty members at the University of Calgary, including Jon Rokne, David Hill, Ian Witten, Mildred Shaw, and Joan Vickers, he has introduced me to more interesting concepts that I could possibly explore in a lifetime. I greatly enjoyed the numerous intellectual discussions with Debbie Leishman, Frank Deur, and other fellow graduate students. Many of the ideas presented here first came to light or were polished in their company. Special thanks go to Burt Conrad and his family who gave me a home away from home during my residency at Calgary.
+</p>
+<p>
+I am also indebted to my former colleagues at the University of Lethbridge. Frank Shaffer, Don Ferguson, and Jack Hiscocks, as department heads, facilitated my becoming a faculty member and pursuing doctoral studies. Together with Steve Wismath, Rex Forsyth, Shelly Wismath, Dennis Connelly, Charles Jorgenson, Wolf Holzman, Amar Sodhi, X. Wu and others, they gave friendship, confidence, and a stimulating work environment. Thanks also to many of my students there, who inspired me with their own intellectual efforts and enthusiasm.
+</p>
+<p>
+Thanks also go to Alan Ashton of WordPerfect Corporation for providing a wonderful place to work, and encouragement to proceed with the development of the object-oriented language described in this dissertation. This work was done there in close collaboration with Lew Bastian and Scott Christensen, friends whose experience, insights and deep understanding I value and admire.
+</p>
+<p>
+I am grateful to Layne Cannon who organized an Advanced Technology Group at WordPerfect Corporation, and invited me to continue the work described here in a stimulating environment of research and unrestrained thought. Here, I have also enjoyed friendship and many hours of stimulating discussion with Lynn Brough, James Gates, Layne Cannon, Thom Boyer, Jim Tinney, and others. I have especially appreciated Lynn's analytical mind and numerous insights into how the world works and how people think. James and Thom have challenged my thinking about desirable characteristics of high level programming languages.
+</p>
+<p>
+When Novell, Inc. acquired WordPerfect Corporation, David Brewer helped our group to weather the storm and, for the most part, stay together. I thank him for allowing me to continue my research in end user programming with the Advanced Technology Group he now leads.
+</p>
+<p>
+Thanks to the many people, who over the years have endured my enthusiasm for computers and technology. A special thanks to those who allowed me to introduce them into the magical world of programming, and who amazed me with their prowess. They play a privileged role in the work described herein, which is about people at least as much as it is about computers.
+</p>
+<p>
+Special thanks go to Jim Tinney who believed in the TOOL vision from the moment he saw it, and whose expertise with word processing technology was invaluable in creating this document.
+</p>
+<p>
+I have been most fortunate to have parents and an extended family who have always believed in me and supported me. Finally, I acknowledge the essential contribution of my wife, Judy, whose love and confidence seem to know no bounds, and who sustains and motivates me. She and our children, Elizabeth and Andrew, give meaning to everything I do.
+</p>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+<hr>
+<a name="TOC">
+                      <h1 align="center">Table of Contents</h1>
+</a>
+<br>
+<br>
+<div class="TOC"><span class="h1"><a href="#Abstract">Abstract</a></span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;iii</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="#Ack">Acknowledgements</a></span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;iv</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="#TOC">Table of Contents</a></span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;vii</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="#LOF">List of Figures</a></span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;xiii</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter1.html">Chapter 1: Introduction</a></span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;1</b></div>
+<div class="TOC"><span class="h2">1.1 Social Needs and Computing</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;1</b></div>
+<div class="TOC"><span class="h3">1.1.1 Case studies</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;3</b></div>
+<div class="TOC"><span class="h4">1.1.1.1 Recording the hunt</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;4</b></div>
+<div class="TOC"><span class="h4">1.1.1.2 Tilling the ground</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;4</b></div>
+<div class="TOC"><span class="h4">1.1.1.3 Computer literacy</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;6</b></div>
+<div class="TOC"><span class="h4">1.1.1.4 Genetic research</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;7</b></div>
+<div class="TOC"><span class="h3">1.1.2 The Programming Bottleneck</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;8</b></div>
+<div class="TOC"><span class="h2">1.2 Programming as a natural human activity</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;8</b></div>
+<div class="TOC"><span class="h3">1.2.1 Programming vs. Performance</span><b class="pg">&nbsp;&nbsp;&nbsp;&nbsp;9</b></div>
+<div class="TOC"><span class="h3">1.2.2 Programming by Example</span><b class="pg">&nbsp;&nbsp;10</b></div>
+<div class="TOC"><span class="h3">1.2.3 Programmed people</span><b class="pg">&nbsp;&nbsp;10</b></div>
+<div class="TOC"><span class="h3">1.2.4 Conclusion</span><b class="pg">&nbsp;&nbsp;11</b></div>
+<div class="TOC"><span class="h3">1.2.5 The Fundamental Theorem of Computing</span><b class="pg">&nbsp;&nbsp;11</b></div>
+<div class="TOC"><span class="h4">1.2.5.1 Finding the program: creation or selection</span><b class="pg">&nbsp;&nbsp;12</b></div>
+<div class="TOC"><span class="h4">1.2.5.2 The programmer creates the program</span><b class="pg">&nbsp;&nbsp;13</b></div>
+<div class="TOC"><span class="h4">1.2.5.3 Identifying the programmer</span><b class="pg">&nbsp;&nbsp;14</b></div>
+<div class="TOC"><span class="h4">1.2.5.4 Conclusion</span><b class="pg">&nbsp;&nbsp;20</b></div>
+<div class="TOC"><span class="h3">1.2.6 The power of modeling and abstraction</span><b class="pg">&nbsp;&nbsp;20</b></div>
+<div class="TOC"><span class="h3">1.2.7 Spreadsheets</span><b class="pg">&nbsp;&nbsp;23</b></div>
+<div class="TOC"><span class="h2">1.3 DataPerfect: databases for end users</span><b class="pg">&nbsp;&nbsp;23</b></div>
+<div class="TOC"><span class="h3">1.3.1 Innovative Features of DataPerfect</span><b class="pg">&nbsp;&nbsp;24</b></div>
+<div class="TOC"><span class="h3">1.3.2 Problems Encountered</span><b class="pg">&nbsp;&nbsp;24</b></div>
+<div class="TOC"><span class="h3">1.3.3 Future Vision</span><b class="pg">&nbsp;&nbsp;25</b></div>
+<div class="TOC"><span class="h2">1.4 Objectives of the TOOL project</span><b class="pg">&nbsp;&nbsp;27</b></div>
+<div class="TOC"><span class="h2">1.5 Summary and overview</span><b class="pg">&nbsp;&nbsp;27</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter2.html">Chapter 2: User Requirements</a></span><b class="pg">&nbsp;&nbsp;30</b></div>
+<div class="TOC"><span class="h2">2.1 Philosophical and Social Context</span><b class="pg">&nbsp;&nbsp;30</b></div>
+<div class="TOC"><span class="h3">2.1.1 Ontology--what is</span><b class="pg">&nbsp;&nbsp;30</b></div>
+<div class="TOC"><span class="h4">2.1.1.1 Popper's three worlds</span><b class="pg">&nbsp;&nbsp;31</b></div>
+<div class="TOC"><span class="h4">2.1.1.2 General Evolution</span><b class="pg">&nbsp;&nbsp;32</b></div>
+<div class="TOC"><span class="h4">2.1.1.3 The role of information</span><b class="pg">&nbsp;&nbsp;35</b></div>
+<div class="TOC"><span class="h3">2.1.2 Epistemology--knowing what is</span><b class="pg">&nbsp;&nbsp;36</b></div>
+<div class="TOC"><span class="h4">2.1.2.1 Theories of truth</span><b class="pg">&nbsp;&nbsp;36</b></div>
+<div class="TOC"><span class="h4">2.1.2.2 Conversation theory</span><b class="pg">&nbsp;&nbsp;37</b></div>
+<div class="TOC"><span class="h4">2.1.2.3 Individuals and societies--who knows what is</span><b class="pg">&nbsp;&nbsp;37</b></div>
+<div class="TOC"><span class="h2">2.2 Organizations</span><b class="pg">&nbsp;&nbsp;38</b></div>
+<div class="TOC"><span class="h3">2.2.1 Organizations as entities</span><b class="pg">&nbsp;&nbsp;38</b></div>
+<div class="TOC"><span class="h3">2.2.2 Programming and organizations</span><b class="pg">&nbsp;&nbsp;39</b></div>
+<div class="TOC"><span class="h3">2.2.3 Organizations, People, and Technology</span><b class="pg">&nbsp;&nbsp;41</b></div>
+<div class="TOC"><span class="h2">2.3 Case studies</span><b class="pg">&nbsp;&nbsp;43</b></div>
+<div class="TOC"><span class="h3">2.3.1 An engineering and manufacturing company</span><b class="pg">&nbsp;&nbsp;44</b></div>
+<div class="TOC"><span class="h3">2.3.2 A university</span><b class="pg">&nbsp;&nbsp;45</b></div>
+<div class="TOC"><span class="h3">2.3.3 A non-profit organization</span><b class="pg">&nbsp;&nbsp;46</b></div>
+<div class="TOC"><span class="h2">2.4 Summary</span><b class="pg">&nbsp;&nbsp;48</b></div>
+<div class="TOC"><span class="h3">2.4.1 Derived requirements</span><b class="pg">&nbsp;&nbsp;49</b></div>
+<div class="TOC"><span class="h3">2.4.2 TOOL requirements</span><b class="pg">&nbsp;&nbsp;50</b></div>
+<div class="TOC"><span class="h4">2.4.2.1 Computational completeness</span><b class="pg">&nbsp;&nbsp;50</b></div>
+<div class="TOC"><span class="h4">2.4.2.2 Simplicity</span><b class="pg">&nbsp;&nbsp;50</b></div>
+<div class="TOC"><span class="h4">2.4.2.3 Prototyping methodology</span><b class="pg">&nbsp;&nbsp;51</b></div>
+<div class="TOC"><span class="h4">2.4.2.4 Primitive operations</span><b class="pg">&nbsp;&nbsp;51</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter3.html">Chapter 3: Existing Technology</a></span><b class="pg">&nbsp;&nbsp;52</b></div>
+<div class="TOC"><span class="h2">3.1 Computer mediated data storage</span><b class="pg">&nbsp;&nbsp;52</b></div>
+<div class="TOC"><span class="h2">3.2 Persistence--knowledge transfer over time and space</span><b class="pg">&nbsp;&nbsp;53</b></div>
+<div class="TOC"><span class="h3">3.2.1 Origins of information and persistency</span><b class="pg">&nbsp;&nbsp;54</b></div>
+<div class="TOC"><span class="h3">3.2.2 Properties of persistent information</span><b class="pg">&nbsp;&nbsp;55</b></div>
+<div class="TOC"><span class="h4">3.2.2.1 Information retrieval</span><b class="pg">&nbsp;&nbsp;55</b></div>
+<div class="TOC"><span class="h4">3.2.2.2 Uniqueness constraints</span><b class="pg">&nbsp;&nbsp;56</b></div>
+<div class="TOC"><span class="h4">3.2.2.3 Indexing</span><b class="pg">&nbsp;&nbsp;57</b></div>
+<div class="TOC"><span class="h4">3.2.2.4 Classification</span><b class="pg">&nbsp;&nbsp;57</b></div>
+<div class="TOC"><span class="h4">3.2.2.5 Relationships</span><b class="pg">&nbsp;&nbsp;57</b></div>
+<div class="TOC"><span class="h3">3.2.3 A Model of Information Storage</span><b class="pg">&nbsp;&nbsp;57</b></div>
+<div class="TOC"><span class="h3">3.2.4 Conclusion</span><b class="pg">&nbsp;&nbsp;59</b></div>
+<div class="TOC"><span class="h2">3.3 BRETAM: from Invention to Products</span><b class="pg">&nbsp;&nbsp;59</b></div>
+<div class="TOC"><span class="h3">3.3.1 Smalltalk and the BRETAM model</span><b class="pg">&nbsp;&nbsp;60</b></div>
+<div class="TOC"><span class="h3">3.3.2 Relational databases and the BRETAM model</span><b class="pg">&nbsp;&nbsp;61</b></div>
+<div class="TOC"><span class="h2">3.4 A Review of Existing Technology</span><b class="pg">&nbsp;&nbsp;61</b></div>
+<div class="TOC"><span class="h3">3.4.1 Flat files</span><b class="pg">&nbsp;&nbsp;61</b></div>
+<div class="TOC"><span class="h3">3.4.2 Relational databases</span><b class="pg">&nbsp;&nbsp;62</b></div>
+<div class="TOC"><span class="h3">3.4.3 Computer programming languages</span><b class="pg">&nbsp;&nbsp;62</b></div>
+<div class="TOC"><span class="h2">3.5 Meeting User Requirements</span><b class="pg">&nbsp;&nbsp;63</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter4.html">Chapter 4: A Dissection of Smalltalk</a></span><b class="pg">&nbsp;&nbsp;65</b></div>
+<div class="TOC"><span class="h2">4.1 A Description of Smalltalk</span><b class="pg">&nbsp;&nbsp;65</b></div>
+<div class="TOC"><span class="h3">4.1.1 Smalltalk Concepts</span><b class="pg">&nbsp;&nbsp;66</b></div>
+<div class="TOC"><span class="h3">4.1.2 The Smalltalk Memory Model</span><b class="pg">&nbsp;&nbsp;68</b></div>
+<div class="TOC"><span class="h3">4.1.3 The Smalltalk Execution System</span><b class="pg">&nbsp;&nbsp;69</b></div>
+<div class="TOC"><span class="h4">4.1.3.1 The byte code interpreter</span><b class="pg">&nbsp;&nbsp;70</b></div>
+<div class="TOC"><span class="h4">4.1.3.2 The primitive routines</span><b class="pg">&nbsp;&nbsp;72</b></div>
+<div class="TOC"><span class="h4">4.1.3.3 Memory management</span><b class="pg">&nbsp;&nbsp;72</b></div>
+<div class="TOC"><span class="h3">4.1.4 The Smalltalk Language Syntax</span><b class="pg">&nbsp;&nbsp;73</b></div>
+<div class="TOC"><span class="h4">4.1.4.1 Message sends</span><b class="pg">&nbsp;&nbsp;73</b></div>
+<div class="TOC"><span class="h4">4.1.4.2 Control constructs</span><b class="pg">&nbsp;&nbsp;75</b></div>
+<div class="TOC"><span class="h3">4.1.5 The Smalltalk Programming Environment</span><b class="pg">&nbsp;&nbsp;76</b></div>
+<div class="TOC"><span class="h2">4.2 A Critique of Smalltalk</span><b class="pg">&nbsp;&nbsp;77</b></div>
+<div class="TOC"><span class="h3">4.2.1 Essential Features of Smalltalk</span><b class="pg">&nbsp;&nbsp;78</b></div>
+<div class="TOC"><span class="h4">4.2.1.1 Modeling with objects</span><b class="pg">&nbsp;&nbsp;78</b></div>
+<div class="TOC"><span class="h4">4.2.1.2 Uniformity of representation</span><b class="pg">&nbsp;&nbsp;78</b></div>
+<div class="TOC"><span class="h4">4.2.1.3 Automatic memory management</span><b class="pg">&nbsp;&nbsp;79</b></div>
+<div class="TOC"><span class="h4">4.2.1.4 Polymorphism and late binding</span><b class="pg">&nbsp;&nbsp;79</b></div>
+<div class="TOC"><span class="h4">4.2.1.5 Syntax of message send</span><b class="pg">&nbsp;&nbsp;81</b></div>
+<div class="TOC"><span class="h4">4.2.1.6 Simple precedence rules</span><b class="pg">&nbsp;&nbsp;81</b></div>
+<div class="TOC"><span class="h4">4.2.1.7 User-defined control structures</span><b class="pg">&nbsp;&nbsp;82</b></div>
+<div class="TOC"><span class="h4">4.2.1.8 Incremental compilation</span><b class="pg">&nbsp;&nbsp;82</b></div>
+<div class="TOC"><span class="h3">4.2.2 Inessential Features of Smalltalk</span><b class="pg">&nbsp;&nbsp;83</b></div>
+<div class="TOC"><span class="h4">4.2.2.1 The metaclass structure</span><b class="pg">&nbsp;&nbsp;83</b></div>
+<div class="TOC"><span class="h4">4.2.2.2 The image</span><b class="pg">&nbsp;&nbsp;84</b></div>
+<div class="TOC"><span class="h4">4.2.2.3 Purity of the message sending paradigm</span><b class="pg">&nbsp;&nbsp;84</b></div>
+<div class="TOC"><span class="h4">4.2.2.4 Multiple inheritance</span><b class="pg">&nbsp;&nbsp;85</b></div>
+<div class="TOC"><span class="h4">4.2.2.5 Context objects</span><b class="pg">&nbsp;&nbsp;85</b></div>
+<div class="TOC"><span class="h4">4.2.2.6 Very large library of classes and methods</span><b class="pg">&nbsp;&nbsp;86</b></div>
+<div class="TOC"><span class="h3">4.2.3 Missing Features of Smalltalk</span><b class="pg">&nbsp;&nbsp;86</b></div>
+<div class="TOC"><span class="h4">4.2.3.1 Persistent objects</span><b class="pg">&nbsp;&nbsp;87</b></div>
+<div class="TOC"><span class="h4">4.2.3.2 Database primitives</span><b class="pg">&nbsp;&nbsp;87</b></div>
+<div class="TOC"><span class="h2">4.3 Conclusion</span><b class="pg">&nbsp;&nbsp;87</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter5.html">Chapter 5: Design of an Object-Oriented Language</a></span><b class="pg">&nbsp;&nbsp;88</b></div>
+<div class="TOC"><span class="h2">5.1 Memory Model</span><b class="pg">&nbsp;&nbsp;89</b></div>
+<div class="TOC"><span class="h3">5.1.1 Intrinsic Objects</span><b class="pg">&nbsp;&nbsp;89</b></div>
+<div class="TOC"><span class="h3">5.1.2 Other Objects</span><b class="pg">&nbsp;&nbsp;90</b></div>
+<div class="TOC"><span class="h4">5.1.2.1 Object components</span><b class="pg">&nbsp;&nbsp;90</b></div>
+<div class="TOC"><span class="h4">5.1.2.2 Essential system objects</span><b class="pg">&nbsp;&nbsp;91</b></div>
+<div class="TOC"><span class="h3">5.1.3 Object interconnections</span><b class="pg">&nbsp;&nbsp;92</b></div>
+<div class="TOC"><span class="h4">5.1.3.1 The instance hierarchy</span><b class="pg">&nbsp;&nbsp;93</b></div>
+<div class="TOC"><span class="h4">5.1.3.2 The inheritance hierarchy</span><b class="pg">&nbsp;&nbsp;94</b></div>
+<div class="TOC"><span class="h4">5.1.3.3 Classes and methods</span><b class="pg">&nbsp;&nbsp;95</b></div>
+<div class="TOC"><span class="h2">5.2 Execution System</span><b class="pg">&nbsp;&nbsp;95</b></div>
+<div class="TOC"><span class="h3">5.2.1 The byte code interpreter</span><b class="pg">&nbsp;&nbsp;95</b></div>
+<div class="TOC"><span class="h4">5.2.1.1 Byte code execution</span><b class="pg">&nbsp;&nbsp;96</b></div>
+<div class="TOC"><span class="h4">5.2.1.2 Message send preparation</span><b class="pg">&nbsp;&nbsp;96</b></div>
+<div class="TOC"><span class="h4">5.2.1.3 Method lookup</span><b class="pg">&nbsp;&nbsp;97</b></div>
+<div class="TOC"><span class="h4">5.2.1.4 Method execution</span><b class="pg">&nbsp;&nbsp;98</b></div>
+<div class="TOC"><span class="h3">5.2.2 Primitive routines</span><b class="pg">&nbsp;&nbsp;99</b></div>
+<div class="TOC"><span class="h3">5.2.3 Input/Output</span><b class="pg">&nbsp;&nbsp;99</b></div>
+<div class="TOC"><span class="h3">5.2.4 Memory management</span><b class="pg">100</b></div>
+<div class="TOC"><span class="h2">5.3 The High-level Language</span><b class="pg">102</b></div>
+<div class="TOC"><span class="h3">5.3.1 TOOL lexemes</span><b class="pg">102</b></div>
+<div class="TOC"><span class="h3">5.3.2 TOOL syntax</span><b class="pg">105</b></div>
+<div class="TOC"><span class="h3">5.3.3 TOOL Semantics</span><b class="pg">111</b></div>
+<div class="TOC"><span class="h4">5.3.3.1 Constants</span><b class="pg">111</b></div>
+<div class="TOC"><span class="h4">5.3.3.2 Variables</span><b class="pg">111</b></div>
+<div class="TOC"><span class="h4">5.3.3.3 Message sends</span><b class="pg">114</b></div>
+<div class="TOC"><span class="h4">5.3.3.4 Expressions</span><b class="pg">114</b></div>
+<div class="TOC"><span class="h4">5.3.3.5 Blocks</span><b class="pg">115</b></div>
+<div class="TOC"><span class="h4">5.3.3.6 Control constructs</span><b class="pg">116</b></div>
+<div class="TOC"><span class="h3">5.3.4 Standard methods</span><b class="pg">125</b></div>
+<div class="TOC"><span class="h4">5.3.4.1 Types</span><b class="pg">126</b></div>
+<div class="TOC"><span class="h4">5.3.4.2 Byte codes</span><b class="pg">126</b></div>
+<div class="TOC"><span class="h4">5.3.4.3 Primitive methods</span><b class="pg">126</b></div>
+<div class="TOC"><span class="h4">5.3.4.4 Ordinary methods</span><b class="pg">126</b></div>
+<div class="TOC"><span class="h2">5.4 Programming Environment</span><b class="pg">128</b></div>
+<div class="TOC"><span class="h2">5.5 Conclusion</span><b class="pg">129</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter6.html">Chapter 6: Implementation</a></span><b class="pg">130</b></div>
+<div class="TOC"><span class="h2">6.1 Bootstrap</span><b class="pg">130</b></div>
+<div class="TOC"><span class="h3">6.1.1 The Bootstrap Notation</span><b class="pg">131</b></div>
+<div class="TOC"><span class="h3">6.1.2 The Bootstrap Process</span><b class="pg">132</b></div>
+<div class="TOC"><span class="h2">6.2 The TOOL cloner</span><b class="pg">134</b></div>
+<div class="TOC"><span class="h2">6.3 TOOL programming language support</span><b class="pg">136</b></div>
+<div class="TOC"><span class="h3">6.3.1 The TOOL Compiler</span><b class="pg">137</b></div>
+<div class="TOC"><span class="h3">6.3.2 The TOOL Decompiler</span><b class="pg">139</b></div>
+<div class="TOC"><span class="h2">6.4 The Windowing System</span><b class="pg">140</b></div>
+<div class="TOC"><span class="h3">6.4.1 Paned Windows</span><b class="pg">141</b></div>
+<div class="TOC"><span class="h3">6.4.2 User interaction with windows</span><b class="pg">142</b></div>
+<div class="TOC"><span class="h3">6.4.3 Programming environment windows</span><b class="pg">143</b></div>
+<div class="TOC"><span class="h3">6.4.4 Implementation details</span><b class="pg">144</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter7.html">Chapter 7: Evaluation</a></span><b class="pg">146</b></div>
+<div class="TOC"><span class="h2">7.1 Internal evaluation</span><b class="pg">147</b></div>
+<div class="TOC"><span class="h2">7.2 Evaluation in a commercial project</span><b class="pg">148</b></div>
+<div class="TOC"><span class="h2">7.3 Evaluation in a course on software testing</span><b class="pg">150</b></div>
+<div class="TOC"><span class="h2">7.4 Evaluation by professional software developers</span><b class="pg">151</b></div>
+<div class="TOC"><span class="h2">7.5 Conclusion</span><b class="pg">154</b></div>
+<div class="TOC"><span class="h3">7.5.1 Computational completeness</span><b class="pg">154</b></div>
+<div class="TOC"><span class="h3">7.5.2 Simplicity</span><b class="pg">154</b></div>
+<div class="TOC"><span class="h3">7.5.3 Prototyping</span><b class="pg">155</b></div>
+<div class="TOC"><span class="h3">7.5.4 Primitive operations</span><b class="pg">155</b></div>
+<div class="TOC"><span class="h3">7.5.5 Further evaluation</span><b class="pg">156</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Chapter8.html">Chapter 8: Conclusions</a></span><b class="pg">157</b></div>
+<div class="TOC"><span class="h2">8.1 Summary of dissertation content</span><b class="pg">157</b></div>
+<div class="TOC"><span class="h3">8.1.1 Design</span><b class="pg">157</b></div>
+<div class="TOC"><span class="h3">8.1.2 of an Object-Oriented</span><b class="pg">157</b></div>
+<div class="TOC"><span class="h3">8.1.3 Database</span><b class="pg">158</b></div>
+<div class="TOC"><span class="h3">8.1.4 Language:</span><b class="pg">158</b></div>
+<div class="TOC"><span class="h3">8.1.5 Bridging the gap between</span><b class="pg">158</b></div>
+<div class="TOC"><span class="h3">8.1.6 organizational requirements</span><b class="pg">159</b></div>
+<div class="TOC"><span class="h3">8.1.7 and the technical implementation of</span><b class="pg">159</b></div>
+<div class="TOC"><span class="h3">8.1.8 an Object-Oriented Information System</span><b class="pg">160</b></div>
+<div class="TOC"><span class="h2">8.2 The TOOL Virtual Environment</span><b class="pg">160</b></div>
+<div class="TOC"><span class="h2">8.3 Contributions of the work described</span><b class="pg">162</b></div>
+<div class="TOC"><span class="h3">8.3.1 Philosophical</span><b class="pg">162</b></div>
+<div class="TOC"><span class="h3">8.3.2 Methodological</span><b class="pg">162</b></div>
+<div class="TOC"><span class="h3">8.3.3 Analytical</span><b class="pg">163</b></div>
+<div class="TOC"><span class="h3">8.3.4 Technical</span><b class="pg">163</b></div>
+<div class="TOC"><span class="h4">8.3.4.1 Simplification</span><b class="pg">163</b></div>
+<div class="TOC"><span class="h4">8.3.4.2 Invention</span><b class="pg">164</b></div>
+<div class="TOC"><span class="h4">8.3.4.3 Portability</span><b class="pg">165</b></div>
+<div class="TOC"><span class="h4">8.3.4.4 Integration of database functionality</span><b class="pg">165</b></div>
+<div class="TOC"><span class="h2">8.4 How well did we succeed? Why did we fail?</span><b class="pg">165</b></div>
+<div class="TOC"><span class="h2">8.5 Bridging the Gap</span><b class="pg">166</b></div>
+<div class="TOC"><span class="h2">8.6 Future work</span><b class="pg">169</b></div>
+<div class="TOC"><span class="h3">8.6.1 Concurrency</span><b class="pg">169</b></div>
+<div class="TOC"><span class="h3">8.6.2 Hypertext</span><b class="pg">170</b></div>
+<div class="TOC"><span class="h3">8.6.3 Computer-supported Cooperative Work</span><b class="pg">170</b></div>
+<div class="TOC"><span class="h3">8.6.4 Artificial Intelligence</span><b class="pg">170</b></div>
+<div class="TOC"><span class="h3">8.6.5 Conclusion</span><b class="pg">171</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Biblio.html">Bibliography</a></span><b class="pg">172</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Appendix1.html">Appendix 1: Working with TOOL</a></span><b class="pg">182</b></div>
+<div class="TOC"><span class="h2">1.1 Starting TOOL</span><b class="pg">182</b></div>
+<div class="TOC"><span class="h2">1.2 Exiting TOOL</span><b class="pg">183</b></div>
+<div class="TOC"><span class="h2">1.3 The TOOL workspace</span><b class="pg">183</b></div>
+<div class="TOC"><span class="h2">1.4 Moving and resizing windows</span><b class="pg">184</b></div>
+<div class="TOC"><span class="h2">1.5 The window menu</span><b class="pg">184</b></div>
+<div class="TOC"><span class="h2">1.6 The TOOL text editor</span><b class="pg">186</b></div>
+<div class="TOC"><span class="h2">1.7 The Evaluate option</span><b class="pg">188</b></div>
+<div class="TOC"><span class="h2">1.8 The Inspect option</span><b class="pg">189</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Appendix2.html">Appendix 2: Creating a TOOL application</a></span><b class="pg">193</b></div>
+<br>
+<div class="TOC"><span class="h1"><a href="Appendix3.html">Appendix 3: TOOL program format</a></span><b class="pg">208</b></div>
+<div class="TOC"><span class="h2">3.1 Overview</span><b class="pg">208</b></div>
+<div class="TOC"><span class="h2">3.2 Literal Methods</span><b class="pg">208</b></div>
+<div class="TOC"><span class="h2">3.3 Conventions</span><b class="pg">209</b></div>
+<br>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+<hr>
+<a name="LOF">
+                       <h1 align="center">List of Figures</h1>
+</a>
+<br>
+<div class="TOC"><span>Figure 1.1 Normal Distribution</span><b class="pg">&nbsp;&nbsp;16</b></div>
+<div class="TOC"><span>Figure 1.2 Pyramid of abilities</span><b class="pg">&nbsp;&nbsp;17</b></div>
+<div class="TOC"><span>Figure 1.3 Program code</span><b class="pg">&nbsp;&nbsp;18</b></div>
+<div class="TOC"><span>Figure 1.4 Abstraction Hierarchy</span><b class="pg">&nbsp;&nbsp;22</b></div>
+<div class="TOC"><span>Figure 1.5 Elaboration of answers</span><b class="pg">&nbsp;&nbsp;22</b></div>
+<div class="TOC"><span>Figure 2.1 Popper's three worlds</span><b class="pg">&nbsp;&nbsp;33</b></div>
+<div class="TOC"><span>Figure 2.2 Monod's analogy</span><b class="pg">&nbsp;&nbsp;34</b></div>
+<div class="TOC"><span>Figure 2.3 Three perspectives on organizations (Scott, 1987)</span><b class="pg">&nbsp;&nbsp;38</b></div>
+<div class="TOC"><span>Figure 2.4. Organizations, People, and Technology</span><b class="pg">&nbsp;&nbsp;42</b></div>
+<div class="TOC"><span>Figure 3.1 Creation of a computer application</span><b class="pg">&nbsp;&nbsp;63</b></div>
+<div class="TOC"><span>Figure 3.2 Chain of technical products</span><b class="pg">&nbsp;&nbsp;64</b></div>
+<div class="TOC"><span>Figure 5.1 Instance Hierarchy</span><b class="pg">&nbsp;&nbsp;93</b></div>
+<div class="TOC"><span>Figure 5.2 Inheritance Hierarchy</span><b class="pg">&nbsp;&nbsp;94</b></div>
+<div class="TOC"><span>Figure 5.3 A class and methods</span><b class="pg">&nbsp;&nbsp;95</b></div>
+<div class="TOC"><span>Figure 5.4 TOOL Lexical Diagrams (Part 1 of 2)</span><b class="pg">103</b></div>
+<div class="TOC"><span>Figure 5.5 TOOL Lexical Diagrams (Part 2 of 2)</span><b class="pg">105</b></div>
+<div class="TOC"><span>Figure 5.6 TOOL Syntax Diagrams (Part 1 of 4)</span><b class="pg">106</b></div>
+<div class="TOC"><span>Figure 5.7 Examples of method patterns</span><b class="pg">107</b></div>
+<div class="TOC"><span>Figure 5.8 TOOL Syntax Diagrams (Part 2 of 4)</span><b class="pg">108</b></div>
+<div class="TOC"><span>Figure 5.9 TOOL Syntax Diagrams (Part 3 of 4)</span><b class="pg">109</b></div>
+<div class="TOC"><span>Figure 5.10 TOOL Syntax Diagrams (Part 4 of 4)</span><b class="pg">111</b></div>
+<div class="TOC"><span>Figure 5.11 TOOL constructs for a single alternative</span><b class="pg">117</b></div>
+<div class="TOC"><span>Figure 5.12 TOOL constructs for two alternatives</span><b class="pg">118</b></div>
+<div class="TOC"><span>Figure 5.13 TOOL constructs for multiple alternatives</span><b class="pg">119</b></div>
+<div class="TOC"><span>Figure 5.14 TOOL construct for iteration: simple repetition</span><b class="pg">120</b></div>
+<div class="TOC"><span>Figure 5.15 TOOL constructs for iteration: counted loops</span><b class="pg">121</b></div>
+<div class="TOC"><span>Figure 5.16 TOOL constructs for iteration: while loops</span><b class="pg">122</b></div>
+<div class="TOC"><span>Figure 5.17 TOOL constructs for Boolean expressions</span><b class="pg">123</b></div>
+<div class="TOC"><span>Figure 5.18 TOOL construct for method return value</span><b class="pg">124</b></div>
+<div class="TOC"><span>Figure 5.19 TOOL constructs for primitive methods</span><b class="pg">124</b></div>
+<div class="TOC"><span>Figure 6.1 The bootstrap process: overview</span><b class="pg">131</b></div>
+<div class="TOC"><span>Figure 6.2 The bootstrap process: step one</span><b class="pg">132</b></div>
+<div class="TOC"><span>Figure 6.3 The bootstrap process: step two</span><b class="pg">133</b></div>
+<div class="TOC"><span>Figure 6.4 The bootstrap process: step three</span><b class="pg">133</b></div>
+<div class="TOC"><span>Figure 6.5 The bootstrap process: step four</span><b class="pg">134</b></div>
+<div class="TOC"><span>Figure 6.6 Sample AST</span><b class="pg">138</b></div>
+<div class="TOC"><span>Figure 6.7 The TOOL Compilers</span><b class="pg">139</b></div>
+<div class="TOC"><span>Figure 6.8 The TOOL Decompiler</span><b class="pg">140</b></div>
+<div class="TOC"><span>Figure 6.9 TOOL windows</span><b class="pg">142</b></div>
+<div class="TOC"><span>Figure 8.1. Programming with the TOOL virtual environment</span><b class="pg">161</b></div>
+<br>
+<p style="font-size: 60%">Copyright &copy; March 8, 1995 Bruce Conrad</p>
+<hr>
+<div><a href="Chapter1.html">Chapter 1: Introduction</a></div>
+<div><a href="Chapter2.html">Chapter 2: User Requirements</a></div>
+<div><a href="Chapter3.html">Chapter 3: Existing Technology</a></div>
+<div><a href="Chapter4.html">Chapter 4: A Dissection of Smalltalk</a></div>
+<div><a href="Chapter5.html">Chapter 5: Design of an Object-Oriented Language</a></div>
+<div><a href="Chapter6.html">Chapter 6: Implementation</a></div>
+<div><a href="Chapter7.html">Chapter 7: Evaluation</a></div>
+<div><a href="Chapter8.html">Chapter 8: Conclusions</a></div>
+<div><a href="Biblio.html">Bibliography</a></div>
+<div><a href="Appendix1.html">Appendix 1: Working with TOOL</a></div>
+<div><a href="Appendix2.html">Appendix 2: Creating a TOOL application</a></div>
+<div><a href="Appendix3.html">Appendix 3: TOOL program format</a></div>
+</div></body>
+</html>
