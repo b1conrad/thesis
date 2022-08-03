@@ -1,0 +1,4 @@
+
+{.File new name: 'D:\temp\FINDFILE.PKG'; fileIn; close.}
+
+{.File new name: 'D:\TOOL\ST\GRAPHICS.FIX'; fileIn; close.}
